@@ -120,7 +120,7 @@ const Visitor = mongoose.model('Visitor', visitorSchema);
 
 // Middleware to track unique visitors
 app.use(async (req, res, next) => {
-  const ipAddress = req.ip || req.connection.remoteAddress;
+  const ipAddress = getClientIp(req);
   const existingVisitor = await Visitor.findOne({ ipAddress });
 
   if (!existingVisitor) {
@@ -129,6 +129,19 @@ app.use(async (req, res, next) => {
 
   next();
 });
+
+// Function to get client's IP address considering proxies
+function getClientIp(req) {
+  const forwardedHeader = req.headers['x-forwarded-for'];
+  if (forwardedHeader) {
+    const ipList = forwardedHeader.split(',');
+    console.log(ipList[0]);
+    return ipList[0].trim();
+  }
+
+  return req.connection.remoteAddress;
+}
+
 // Middleware to handle preflight requests
 app.options('/visitor-count');
 // Route to get the count of unique visitors
