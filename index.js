@@ -2,7 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-// const cors = require('cors');
+const cors = require('cors');
 const app = express();
 const PORT = 5000;
 const connectToMongoDB = async () => {
@@ -23,8 +23,8 @@ app.get('/', (req, res) => {
 
 // Call the function to connect to MongoDB
 connectToMongoDB();
-// app.use(cors('*'));
-app.use(express.json())
+// Allow requests from a specific origin
+app.use(cors({ origin: 'https://toolboxpress.vercel.app' }));app.use(express.json())
 app.use(bodyParser.json());
 
 const feedbackSchema = new mongoose.Schema({
