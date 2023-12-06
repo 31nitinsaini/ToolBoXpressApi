@@ -252,4 +252,3 @@ app.post('/request-tool', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-exports.app = functions.https.onRequest(app);
